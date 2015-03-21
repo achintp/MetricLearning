@@ -1,4 +1,5 @@
 clear;
+n = 10
 MU1 = [2 2];
 SIGMA1 = [2 0; 0 1];
 MU2 = [-2 -1];
@@ -7,10 +8,10 @@ MU3 = [10 4];
 SIGMA3 = [3 0; 0 1];
 
 
-X = [mvnrnd(MU1, SIGMA1, 1000); mvnrnd(MU2, SIGMA2, 1000); mvnrnd(MU3, SIGMA3, 1000)];
-S1 = X([1:1000], :);
-S2 = X([1001:2000], :);
-S3 = X([2001:3000], :);
+X = [mvnrnd(MU1, SIGMA1, n); mvnrnd(MU2, SIGMA2, n); mvnrnd(MU3, SIGMA3, n)];
+S1 = X([1:n], :);
+S2 = X([n + 1:2*n], :);
+S3 = X([2*n + 1:3*n], :);
 
 
 scatter(X(:,1), X(:,2), 10, '.')
@@ -34,7 +35,7 @@ for k=1:length(S)
     curCell = S{k};
     E_temp = diag(curCell*curCell');
     E2{k} = E_temp;
-    T2cell{k} = 1/(numel(curCell))*ones(size(curCell, 1), 1);
+    T2cell{k} = 1/(length(curCell))*ones(size(curCell, 1), 1);
 end
 arr = cell2mat(E1);
 arr2 = cell2mat(E2);
@@ -48,9 +49,9 @@ t4 = ones(cols, 1);
 
 cvx_begin
 variables sig mew
-maximize log((1/length(D))*t1*exp(sig*arr)*t2 + exp(mew))
+maximize log((1/length(D))*t1*exp(-sig*arr)*t2 + exp(mew))
 subject to
-    log((1/size(S))*t3*exp(sig*arr2)*t4 + exp(mew)) <= 0
+    log((1/length(S))*t3*exp(-sig*arr2)*t4 + exp(mew)) <= 0
 cvx_end
 
 
