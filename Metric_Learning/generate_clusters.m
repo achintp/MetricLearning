@@ -1,5 +1,6 @@
 clear;
-n = 10
+n = 10;
+p = 2;
 MU1 = [2 2];
 SIGMA1 = [2 0; 0 1];
 MU2 = [-2 -1];
@@ -46,15 +47,41 @@ t2 = ones(cols, 1);
 t3 = cell2mat(T2cell)';
 t4 = ones(cols, 1);
 
+M1 = cell(length(D), 1);
+for k=1:length(D)
+   curCell = D{k};
+   M1{k} = curCell{1} - curCell{2};   
+end
+
+M2 = cell(length(S), 1);
+for k = 1: length(S)
+   curCell = S{k};
+end
+
+
+
+% 
+% cvx_begin
+% variables sig mew
+% maximize log((1/length(D))*t1*exp(-sig*arr)*t2 + exp(mew))
+% subject to
+%     log((1/length(S))*t3*exp(-sig*arr2)*t4 + exp(mew)) <= 0
+% cvx_end
+
 
 cvx_begin
-variables sig mew
-maximize log((1/length(D))*t1*exp(-sig*arr)*t2 + exp(mew))
+variable M(2,2)
+expressions x(length(D)) y(length(S));
+for i=1:length(D)
+   x(i) = sum(sum(Mahalanobis(D{i}{1}, D{i}{2}, M, p))); 
+end
+for i=1:length(S)
+   y(i) = sum(sum(Mahalanobis(S{i}, S{i}, M, 1)));
+end
+maximize sum(x)
 subject to
-    log((1/length(S))*t3*exp(-sig*arr2)*t4 + exp(mew)) <= 0
+    sum(y) <= 1
+    M == semidefinite(2)
 cvx_end
-
-
-
 
 
