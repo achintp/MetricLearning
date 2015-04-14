@@ -2,17 +2,17 @@
 #include "class_handle.hpp"
 #include "random_forest.h"
 
-void mexFUnction(int nlhs, mxArray *phls[], int nrhs, const mxArray *prhs[]) {
+void mexFUnction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 
 	// Get the command string
 	char cmd[64];
-	if(nhrs < 1 || mxGetString(prhs[0], cmd, sizeof(cmd)))
+	if(nrhs < 1 || mxGetString(prhs[0], cmd, sizeof(cmd)))
 		mexErrMsgTxt("First input should be command string of < 64 chars");
 
 	// Make new object
 	if(!strcmp("new", cmd)){
 		if (nrhs < 13)
-			mexErrMsgTxt("Not enough params to construct forest")
+			mexErrMsgTxt("Not enough params to construct forest");
 
 		// Get the forest constructor arguments
 		float *data = (float *)mxGetData(prhs[1]);
@@ -37,7 +37,7 @@ void mexFUnction(int nlhs, mxArray *phls[], int nrhs, const mxArray *prhs[]) {
 
 	// check if there is a second input given
 	if(nrhs < 2)
-		mexErrMsgTxt("Second input should be the class instance handle")
+		mexErrMsgTxt("Second input should be the class instance handle");
 
 	// delete the object
 	if(!strcmp("delete", cmd)){
