@@ -1,0 +1,9 @@
+This is the matlab version of our code, which uses the provided matlab-compatible C++ random forest code.  The CrossValidateKNN_RFD function included here will do cross-validated k-nearest neighbor classification using our method.  If you wish to use our method in some other test setting, you will need to manually manipulate the training and testing data (see lines 64 and 81 of the cross-validation code) before feeding it in to the random forest classifier.
+
+To see a demo of our method, do:
+make mex
+(in matlab) demo
+
+Requires gcc, gfortran, matlab and properly configured mex.
+
+Note that this is rough research code.  For a better documented and more general interface (as well as faster, multithreaded execution) use our python code.

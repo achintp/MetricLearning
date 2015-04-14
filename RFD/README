@@ -1,0 +1,17 @@
+Code for Random Forest Distance
+
+Authors: Caiming Xiong, David Johnson, Ran Xu, and Jason J. Corso
+Emails: cxiong@buffalo.edu, davidjoh@buffalo.edu, rxu2@buffalo.edu, jcorso@buffalo.edu
+
+This code accompanies our KDD 2012 Paper.  If you use the code, please cite:
+C. Xiong, D. Johnson, R. Xu, and J. J. Corso.  "Random Forests for Metric Learning with Implicit Pairwise Position Dependence."  Proceedings of ACM SIGKDD International Conference on Knowledge Discovery and Data Mining.  2012.
+
+
+This package contains two different versions of our code, for matlab and python.  
+
+Note that the matlab code is rough and has limited documentation.  We recommend using the python code, as it is significantly cleaner and clearer, with full documentation, more parameter options, faster execution and multithreading support.
+
+
+----------
+Version 2: Feb 28, 2014
+Version 1: Final KDD 2012 Release

@@ -1,0 +1,16 @@
+This folder contains a Python/C++ implementation of the random forest distance (RFD).  
+
+The underlying random forest implementation is fully parallelized, and best called via the existing python bindings. It can be accessed directly via C++ as well, though documentation for the C++ code is limited.
+
+In order to begin using the library, simply run "python setup.py" and add this directory to your PYTHONPATH and import as "RFD".  Full documentation of all the methods can be found within RFD.py (or simply by accessing docstrings).  Run "python rfddemo.py" for a short demonstration.
+
+Requires:
+Python
+numpy
+gcc/g++
+SWIG
+libboost_thread
+
+Demo additionally requires scipy
+
+The C++ code is set up to compile and run on UNIX systems - minor modifications may be needed to compile under MacOS or Windows (see in particular the unistd.h import in random_forest.h).
