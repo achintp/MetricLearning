@@ -39,6 +39,7 @@ import_array();
 %apply (int* INPLACE_ARRAY2, int DIM1, int DIM2) {(int* neighbors, int m2, int nn1),
 												  (int* pairs, int numpairs, int three)}
 %apply (float* ARGOUT_ARRAY1, int DIM1) {(float* out, int m3)}
+%apply (double* INPLACE_ARRAY2, int DIM1, int DIM2) {(double *codes, int insts1, int trsize)}
 
 %rename (votesset) vs;
 %exception vs {

@@ -8,9 +8,9 @@ def normalizelabels(labs):
     from 0 to n, where n is the number of different labels
     labs = 1-dimensional array-like of labels (will be flattened if not 1-dimensional)
     """
-    labs = np.int32(np.array(labs)).flatten()
-    labset = np.unique(labs)
-    newlabs = np.arange(labset.shape[0])
+    labs = np.int32(np.array(labs)).flatten()  # Makes a 1-D array of labels
+    labset = np.unique(labs)  # The mnumber of unique labels specified
+    newlabs = np.arange(labset.shape[0])  # Evenly spaced values between 0 and instances
     temp = np.zeros_like(labs)
     for i in xrange(labset.shape[0]):
         temp[labs == labset[i]] = newlabs[i]
@@ -47,6 +47,7 @@ class RF:
     def __init__(self, data=None, labels=None, forestloc=None, ntrees=100, K=None, minnodesize=1,
                  alg="single", F=None, uniquevals=False, threads=1):
         self.threads = threads
+        
         # print labels
         # check to see if we are loading a forest from file or training a new one
         if forestloc == None:
@@ -55,14 +56,14 @@ class RF:
                 raise ValueError("Invalid value for data, data must be a numpy ndarray.")
             if type(labels) != np.ndarray and labels != None:
                 raise ValueError("Invalid value for labels, labels must be a numpy ndarray or None.")
-            self.n = data.shape[0]
-            self.d = data.shape[1]
+            self.n = data.shape[0]  # Number of instances
+            self.d = data.shape[1]  # Number of dimensions
             if labels != None:
-                self.c = labels.max() + 1  # assume labels range from 0 to c-1
-            self.ntrees = ntrees
-            self.K = K
-            self.F = F
-            self.minnodesize = minnodesize
+                self.c = labels.max() + 1  # assume labels range from 0 to c-1, should be normalized
+            self.ntrees = ntrees  #Number of trees
+            self.K = K  # Number of features to split on at a branch
+            self.F = F  # Number of different thresholds to try for each variable
+            self.minnodesize = minnodesize  # Min size to mark node terminal
             if self.K == None:
                 self.K = int(np.ceil(np.log2(self.d)))
             if self.F == None:

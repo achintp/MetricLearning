@@ -82,7 +82,7 @@ public:
 	int predict(const float* point) const;
 	int predict_RC(const float* point) const;
 	//get regression result (proportion of positive samples in input's leaf node)
-	void regress(const float* point, float* out, float &s) const;
+	void regress(const float* point, double &s) const;
 	void regress_RC(const float* point, float* out) const;
 	//compute the total gain of each variable in this tree
 	void variable_gain(float* vars);

@@ -174,7 +174,7 @@ class RandomForest(_object):
         return _librf.RandomForest_rfdregr(self, *args)
 
     def rfdcode(self, *args):
-        """rfdcode(RandomForest self, float const * data, float * codes, bool position)"""
+        """rfdcode(RandomForest self, float const * data, double * codes, bool position)"""
         return _librf.RandomForest_rfdcode(self, *args)
 
     def variable_importance(self, *args):

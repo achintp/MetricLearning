@@ -87,7 +87,7 @@ public:
 			bool position);
 
 	//method for getting the code over a set of points
-	void rfdcode(const float* data, int insts, int atts, float* codes,
+	void rfdcode(const float* data, int insts, int atts, double* codes,
 	int insts1, int trsize, bool position);
 	//Compute variable importance (in terms of average entropy gain) for features
 	void variable_importance(float* vars, int atts); //NYI for RC trees
@@ -163,7 +163,7 @@ private:
 
 	//parallel helper to get code words
 	static void rfdcodehelper(vector<Tree*>& trees, const float* point, 
-	int atts, float* codes, mom::Semaphore* sem);
+	int atts, double* codes, mom::Semaphore* sem);
 
 	//parallel helper method for nearest neighbor retrieval
 	static void nearest_multi_worker(const float* points, int* neighbors,

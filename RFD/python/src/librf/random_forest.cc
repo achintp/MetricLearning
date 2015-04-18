@@ -190,6 +190,17 @@ RandomForest::RandomForest(const float *data, int atts, int insts,
 	assert(insts2 == insts);
 	assert(splitfun_ == SINGLE || splitfun == RC);
 
+	cout << atts << " " << insts << " " << insts2 << " " << num_trees << " " << K << " " << F  << " " << min_size << " " << splitfun << " " << " " << threads << " " << compute_unique << endl;
+
+	for(int i = 0; i < atts; i++){
+		for(int j = 0; j < insts; j++){
+			cout << data[insts*i + j] << " ";
+		}
+		cout << "Next" << endl;
+	}
+	cout << endl;
+
+	cout << "Insts: " << insts2 << endl;
 	//if specified, compute unique values in each dimension
 	int i, j;
 	if (!compute_unique || splitfun == RC)
@@ -217,6 +228,7 @@ RandomForest::RandomForest(const float *data, int atts, int insts,
 			C_ = labels[i] + 1;
 	}
 	assert(C_ >= 2);
+	cout << "C is " << C_ << endl;
 
 	//now generate trees
 	//class_weights_.resize(2, 1);
@@ -487,8 +499,9 @@ void RandomForest::gettreeregs(Tree* tree, const float* data, float* regs,
 	float* tempregs = new float[insts * C];
 	float s;
 	if (splitfun == SINGLE) {
-		for (int i = 0; i < insts; i++)
-			tree->regress(data + i * atts, tempregs + i * C, s);
+		for (int i = 0; i < insts; i++){
+			// tree->regress(data + i * atts, tempregs + i * C, s);
+		}
 	} else {
 		for (int i = 0; i < insts; i++) {
 			tree->regress_RC(data + i * atts, tempregs + i * C);
@@ -558,9 +571,20 @@ void RandomForest::rfdregr(const float* data, int insts, int atts,
 }
 
 
-void RandomForest::rfdcode(const float* data, int insts, int atts, float* codes,
+void RandomForest::rfdcode(const float* data, int insts, int atts, double* codes,
 	int insts1, int trsize, bool position) {
-	assert(C_ == 2);
+	// assert(C_ == 2);  // Should fail?
+	// assert(false);
+	cout << "C in rfdcode: " << C_ << endl; 
+	cout << "insts1: " << insts1 << " " << trsize << endl;
+
+	for(int i = 0; i < insts; i++){
+		for(int j = 0; j < atts; j++){
+			cout << data[i*atts + j] << " ";
+		}
+		cout << endl;
+	}
+
 	assert(trsize == ntrees());
 	if(position)
 		assert(false);
@@ -578,37 +602,46 @@ void RandomForest::rfdcode(const float* data, int insts, int atts, float* codes,
 	tg.join_all();
 	delete sem;
 
+	// // for(int i = 0; i < insts; i++){
+	// // 	rfdcodehelper(trees_, data + i*atts, atts, codes + i*trsize);
+	// // 	cout << "Out here" << endl;
+	// }
+
 	for(int i = 0; i < insts; i++){
 		cout << "[";
 		for(int j = 0; j < trsize; j++){
-			cout << codes[i*trsize + j];
+			cout << codes[i*trsize + j] << endl;
 		}
-		cout <<  "]" << endl << endl;
+		cout <<  "]" << endl << endl << endl;
 	}
 }
 /*
  Parallel helper method for filling in code words from each tree
 */
 void RandomForest::rfdcodehelper(vector<Tree*>& trees, const float* point, 
-	int atts, float* codes, mom::Semaphore* sem){
+	int atts, double* codes, mom::Semaphore* sem){
 	int ntrees = trees.size();
 
 	float* tdat = new float[atts];
-	float *temp = new float[2];
+	// float *temp = new float[2];
 
 	for(int j = 0; j < atts; j++){
 		tdat[j] = point[j];
 	}
-
+	// cout << "Before regress" << endl;
 	for(int j = 0; j < ntrees; j++){
 		codes[j] = 0;
-		float s;
-		trees[j]->regress(tdat, temp, s);
+		double s;
+		trees[j]->regress(tdat, s);
 		codes[j] = s;
 	}
-
+	// cout << "After regress" << endl;
 	delete[] tdat;
-	delete[] temp;
+		// cout << "After regress2" << endl;
+
+	// delete[2] temp;
+	// cout << "After regress3" << endl;
+
 	sem->Release();
 }
 
@@ -643,8 +676,8 @@ void RandomForest::rfdregrhelper(vector<Tree*>& trees, const float* point,
 				//now sum tree regression responses to it
 				dists[i] = 0;
 				for (j = 0; j < ntrees; j++) {
-					float s;
-					trees[j]->regress(tdat, temp, s);
+					double s;
+					trees[j]->regress(tdat, s);
 					dists[i] += temp[1];
 					dists[i] = s;
 				}
@@ -659,8 +692,8 @@ void RandomForest::rfdregrhelper(vector<Tree*>& trees, const float* point,
 				//now sum tree regression responses to it
 				dists[i] = 0;
 				for (j = 0; j < ntrees; j++) {
-					float s;
-					trees[j]->regress(tdat, temp, s);
+					double s;
+					trees[j]->regress(tdat, s);
 					dists[i] += temp[1];
 					dists[i] = s;
 				}

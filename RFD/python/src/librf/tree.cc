@@ -489,8 +489,8 @@ void Tree::build_node(uint32 node_num) {
 
 	//if completely pure or min size, declare terminal
 	if (unique.size() <= min_size_ || pure) {
-		//cout << "Pure node at depth: " << int(n->depth) << endl;
-		//cout << "with node size " << n->instances->size() << endl;
+		// cout << "Pure node at depth: " << int(n->depth) << endl;
+		// cout << "with node size " << n->instances->size() << endl;
 		n->status = TERMINAL;
 		delete n->instances;
 		terminal_nodes_++;
@@ -597,8 +597,11 @@ void Tree::build_node(uint32 node_num) {
 	finatt = attrs[argbest];
 	delete[] split_points, split_gains, temp_points, temp_gains;
 
+
+
 	//check to see if we have met minimum gain requirement
 	if (best / n->entropy < min_gain_ || best < FLT_EPSILON) {
+		cout << "Best " << best << endl;
 		n->status = TERMINAL;
 		delete n->instances;
 		terminal_nodes_++;
@@ -1531,16 +1534,18 @@ int Tree::predict_RC(const float* point) const {
 /*
  * @param point d-length float array containing the instance to regress
  */
-void Tree::regress(const float* point, float* out, float &code) const {
+void Tree::regress(const float* point, double &code) const {
 	//base case
 	const tree_node* n;
 	int cur_node = 0;
 	code = 1;
+	// cout << "In regress" << endl;
 	while (true) {
 		n = nodes_[cur_node];
 		if (n->status == TERMINAL) {
-			for (int i = 0; i < C_; i++)
-				out[i] = (n->distribution)[i];
+			for (int i = 0; i < C_; i++){
+				// out[i] = (n->distribution)[i];
+			}
 			// cout << C_ << endl;
 			// cout << s << endl;
 			break;
